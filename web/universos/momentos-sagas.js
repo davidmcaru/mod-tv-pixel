@@ -2,6 +2,7 @@
 (function () {
   const TAU = Math.PI * 2;
   const PR = () => window.PRUEBA || {};
+  const YA = new URLSearchParams(location.search).has("animacion");
   const base = (n) => n.split("·")[0];
   const entre = (h, a, b) => h >= a && h <= b;
   const deNoche = (h) => h >= 20 || h <= 5;
@@ -379,11 +380,12 @@
       .map(([id, dura]) => seguro(() => { const m = PREPARA[id](ctx); return m && { id, dura, ...m, dibuja: DIBUJA[id] }; }))]
       .filter(Boolean);
     if (hechos.length) k.actores.push({ tipo: "momentos", lista: hechos, semilla: s * 7.3 + h * 1.9 + d });
+    window.Momentos.ahora = hechos.map((m) => m.id);
   }
   if (window.Vivo && Vivo.tipo) Vivo.tipo("momentos", (a, t) => {
     const P = Vivo.piezas, prueba = !!PR().momento;
     if (!a.lista.length) return;
-    if (a.k === undefined) { a.k = 0; a.cuando = prueba ? 0.6 : 30 + P.ruido(a.semilla) * 30; }
+    if (a.k === undefined) { a.k = 0; a.cuando = prueba ? 0.6 : YA ? 1 : 30 + P.ruido(a.semilla) * 30; }
     for (;;) { const m = a.lista[a.k % a.lista.length]; if (t <= a.cuando + m.dura) break; a.cuando += m.dura + (prueba ? 2.4 : 100 + P.ruido(a.k * 1.7 + a.semilla) * 80); a.k++; }
     if (t < a.cuando) return;
     const m = a.lista[a.k % a.lista.length];

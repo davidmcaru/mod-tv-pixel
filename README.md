@@ -90,7 +90,8 @@ las apps que vienen de fábrica, por lotes y con copia para deshacerlo. Mod TV P
 ## Verla en el ordenador
 
 **Sin descargar nada:** [davidmcaru.github.io/mod-tv-pixel](https://davidmcaru.github.io/mod-tv-pixel/), en el navegador,
-con la hora de ahora.
+con la hora de ahora. Abajo, «Anterior» y «Siguiente» recorren los escenarios de cada saga en el orden de su historia, y
+«Ver su animación» la saca sin esperar.
 
 Las pantallas son páginas web: `index.html` las encaja en la ventana, y `web/piratas.html`, `web/ninjas.html` y
 `web/magos.html` son cada una, a 1920 × 1080:
@@ -98,6 +99,7 @@ Las pantallas son páginas web: `index.html` las encaja en la ventana, y `web/pi
 - `?dia=3&h=21` enseña otro día (0 es el domingo) y otra hora.
 - Las flechas y Enter hacen lo que el mando.
 - `?graficos=basico` quita lo que se mueve en el fondo, como en las teles más lentas.
+- `?animacion` saca enseguida la animación del escenario; en la tele, la primera llega a los 30 o 60 segundos.
 
 ## Compilarla
 
@@ -135,4 +137,5 @@ El APK sale en `app/build/outputs/apk/release`.
 Mod TV Pixel is a pixel-art home screen for Android TV. Three sagas (pirates, ninjas and wizards) follow the time of day
 and the day of the week: 119 hand-drawn scenes, 303 characters and 103 small animations. Your favourite apps sit in a
 wheel on the left, and the same screen doubles as a screensaver. Install the APK from the releases with `adb install`,
-or open `web/piratas.html` in a browser to try it. MIT licensed; the fonts keep their SIL Open Font License.
+or try it in the browser at https://davidmcaru.github.io/mod-tv-pixel/, where you can step through every scene and play
+its animation. MIT licensed; the fonts keep their SIL Open Font License.

@@ -10,17 +10,32 @@
   @font-face { font-family: "Outfit"; src: url("web/fuentes/outfit.ttf"); font-weight: 100 900; }
   :root { color-scheme: dark; }
   html, body { margin: 0; height: 100%; background: #0d0e14; color: #fff; font-family: "Outfit", sans-serif; overflow: hidden; }
-  header { height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 16px; box-sizing: border-box; }
+  body { display: flex; flex-direction: column; }
+  header, footer { flex: none; display: flex; align-items: center; gap: 12px; padding: 0 16px; box-sizing: border-box; }
+  header { height: 60px; }
+  footer { justify-content: center; padding: 12px 16px 16px; }
   header b { font: 13px "Press Start 2P", monospace; margin-right: 10px; white-space: nowrap; }
-  header button { font: 11px "Press Start 2P", monospace; color: #fff; background: #23263a; border: 2px solid transparent; border-radius: 10px;
-    padding: 10px 12px; cursor: pointer; }
-  header button.si { border-color: #f5d36f; color: #f5d36f; }
-  header button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  button { font: 11px "Press Start 2P", monospace; color: #fff; background: #23263a; border: 2px solid transparent; border-radius: 10px;
+    padding: 10px 12px; cursor: pointer; white-space: nowrap; }
+  button.si { border-color: #f5d36f; color: #f5d36f; }
+  button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   header span { margin-left: auto; font-size: 15px; color: rgba(255, 255, 255, 0.62); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   header a { color: #7ad0ff; }
-  #marco { position: absolute; top: 60px; left: 0; right: 0; bottom: 0; }
+  #marco { position: relative; flex: 1; min-height: 0; }
   #tele { position: absolute; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; }
-  @media (max-width: 720px) { header span { display: none; } header b { display: none; } }
+  #sitio { width: 440px; min-width: 0; text-align: center; }
+  #sitio b { display: block; font-size: 19px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #cuando { display: block; margin-top: 3px; font-size: 14px; color: rgba(255, 255, 255, 0.62); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #cuando i { font: normal 9px "Press Start 2P", monospace; color: #f5d36f; margin-right: 8px; }
+  #animar { margin-left: 8px; background: #f5d36f; color: #151515; }
+  #animar:disabled { background: #23263a; color: rgba(255, 255, 255, 0.35); cursor: default; }
+  @media (max-width: 720px) {
+    header span, header b, .largo, .cap { display: none; }
+    #marco { flex: none; aspect-ratio: 16 / 9; }
+    footer { flex-wrap: wrap; gap: 8px; padding: 10px 12px 12px; }
+    #sitio { flex: 1; width: auto; }
+    #animar { margin-left: 0; flex-basis: 100%; }
+  }
 </style>
 </head>
 <body>
@@ -30,27 +45,96 @@
   <span>Las flechas y Enter, como el mando · <a href="https://github.com/davidmcaru/mod-tv-pixel">el código, en GitHub</a></span>
 </header>
 <div id="marco"><iframe id="tele" title="La pantalla de inicio de la tele"></iframe></div>
+<footer>
+  <button id="antes" aria-label="El escenario anterior">&lt;<span class="largo"> Anterior</span></button>
+  <div id="sitio" aria-live="polite"><b id="titulo"></b><span id="cuando"></span></div>
+  <button id="despues" aria-label="El escenario siguiente"><span class="largo">Siguiente </span>&gt;</button>
+  <button id="animar" disabled>Ver su animación</button>
+</footer>
+<script src="web/universos/horario-universos.js"></script>
 <script>
   // La pantalla es la de la tele, a 1920 × 1080: aquí se encaja en la ventana. ?saga=ninjas&dia=3&h=21 enseña otra saga,
-  // otro día (0 es el domingo) y otra hora.
-  const marco = document.getElementById("marco"), tele = document.getElementById("tele"), q = new URLSearchParams(location.search);
+  // otro día (0 es el domingo) y otra hora. Abajo se recorren los escenarios de cada saga en el orden de su historia, que
+  // empieza el lunes a las 2:00, cada uno a la hora en que sale por primera vez; «Ver su animación» la saca enseguida.
+  const $ = (id) => document.getElementById(id);
+  const marco = $("marco"), tele = $("tele"), q = new URLSearchParams(location.search), H = window.HorarioU || null;
+  const DIAS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  const entero = (k, max) => { const v = Number(q.get(k)); return q.get(k) !== null && q.get(k) !== "" && Number.isInteger(v) && v >= 0 && v <= max ? v : null; };
+  let saga = ["piratas", "ninjas", "magos"].includes(q.get("saga")) ? q.get("saga") : "piratas";
+  let dia = entero("dia", 6), hora = entero("h", 23); // null: los de ahora
+  const graficos = q.has("graficos") ? `graficos=${encodeURIComponent(q.get("graficos"))}` : "";
+
   function encaja() {
     const k = Math.min(marco.clientWidth / 1920, marco.clientHeight / 1080);
     tele.style.transform = `scale(${k})`;
     tele.style.left = (marco.clientWidth - 1920 * k) / 2 + "px";
     tele.style.top = (marco.clientHeight - 1080 * k) / 2 + "px";
   }
-  function poner(saga) {
-    const extra = ["dia", "h", "graficos"].filter((k) => q.has(k)).map((k) => `${k}=${encodeURIComponent(q.get(k))}`).join("&");
-    tele.src = `web/${saga}.html${extra ? "?" + extra : ""}`;
-    document.querySelectorAll("header button").forEach((b) => b.classList.toggle("si", b.dataset.saga === saga));
-    history.replaceState(null, "", "?" + [`saga=${saga}`, extra].filter(Boolean).join("&"));
+  const cuando = () => { const f = new Date(); return { d: dia ?? f.getDay(), h: hora ?? f.getHours() }; };
+  const vistos = {};
+  function recorrido() { // los escenarios de la saga, en el orden en que salen desde el lunes a las 2:00
+    if (vistos[saga]) return vistos[saga];
+    const semana = H[saga].semana, ya = new Set(), r = [];
+    for (let i = 0; i < 168; i++) {
+      const t = (26 + i) % 168, d = Math.floor(t / 24), h = t % 24, x = semana[d][h];
+      if (x && !ya.has(x.s)) { ya.add(x.s); r.push({ s: x.s, d, h }); }
+    }
+    return (vistos[saga] = r);
   }
-  document.querySelectorAll("header button").forEach((b) => b.addEventListener("click", () => poner(b.dataset.saga)));
-  tele.addEventListener("load", () => { try { tele.contentWindow.focus(); } catch (e) {} });
+  const aqui = () => { const { d, h } = cuando(), x = H[saga].semana[d][h]; return { d, h, s: x ? x.s : null }; };
+
+  function etiqueta() {
+    const { d, h, s } = aqui(), u = H[saga], lista = recorrido(), i = lista.findIndex((e) => e.s === s);
+    const sitio = u.sitios.find((e) => e.s === s), cap = u.capitulos[h < 2 ? (d + 6) % 7 : d];
+    $("titulo").textContent = sitio ? sitio.titulo : "";
+    const n = document.createElement("i"), dc = document.createElement("span");
+    n.textContent = i >= 0 ? `${i + 1}/${lista.length}` : "";
+    dc.className = "cap";
+    dc.textContent = cap ? ` · ${cap}` : "";
+    const ya = dia === null && hora === null, min = ya ? String(new Date().getMinutes()).padStart(2, "0") : "00";
+    $("cuando").replaceChildren(n, `${ya ? "Ahora, " : ""}${DIAS[d]}, ${h}:${min}`, dc);
+  }
+
+  let vuelta = 0;
+  function cargar(animacion) {
+    const { d, h } = cuando();
+    const p = [(dia !== null || animacion) && `dia=${d}`, (hora !== null || animacion) && `h=${h}`, graficos, animacion && "animacion"];
+    tele.src = `web/${saga}.html` + (p.some(Boolean) ? "?" + p.filter(Boolean).join("&") : "");
+    document.querySelectorAll("header button").forEach((b) => b.classList.toggle("si", b.dataset.saga === saga));
+    history.replaceState(null, "", "?" + [`saga=${saga}`, dia !== null && `dia=${dia}`, hora !== null && `h=${hora}`, graficos].filter(Boolean).join("&"));
+    vuelta++;
+    $("animar").disabled = true;
+    if (H) etiqueta();
+  }
+  function paso(k) {
+    const lista = recorrido(), i = Math.max(0, lista.findIndex((e) => e.s === aqui().s)), e = lista[(i + k + lista.length) % lista.length];
+    dia = e.d; hora = e.h;
+    cargar(false);
+  }
+  // «Ver su animación», solo si la escena de esta hora tiene alguna: lo dice la propia pantalla al montarla
+  function mirar() {
+    const yo = vuelta, t0 = Date.now();
+    (function otra() {
+      if (yo !== vuelta) return;
+      let hay = null;
+      try { const m = tele.contentWindow.Momentos; hay = m && m.ahora ? m.ahora.length > 0 : null; } catch (e) { hay = true; }
+      if (hay === null && Date.now() - t0 < 5000) return setTimeout(otra, 250);
+      $("animar").disabled = !hay;
+      $("animar").title = hay ? "" : "Este escenario no tiene animación a esta hora";
+    })();
+  }
+
+  document.querySelectorAll("header button").forEach((b) => b.addEventListener("click", () => { saga = b.dataset.saga; cargar(false); }));
+  $("antes").addEventListener("click", () => paso(-1));
+  $("despues").addEventListener("click", () => paso(1));
+  $("animar").addEventListener("click", () => cargar(true));
+  tele.addEventListener("load", () => { try { tele.contentWindow.focus(); } catch (e) {} mirar(); });
   addEventListener("resize", encaja);
+  if (!H) document.querySelector("footer").hidden = true;
+  // con la hora de ahora, la etiqueta cambia cuando cambia la hora, como la pantalla
+  setInterval(() => { if (H && dia === null && hora === null) { etiqueta(); mirar(); } }, 30000);
   encaja();
-  poner(["piratas", "ninjas", "magos"].includes(q.get("saga")) ? q.get("saga") : "piratas");
+  cargar(false);
 </script>
 </body>
 </html>
