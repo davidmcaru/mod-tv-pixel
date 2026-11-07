@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mod TV Pixel</title>
+<meta name="description" content="Una pantalla de inicio en pixel art para Android TV, en el navegador: tres sagas que cambian con la hora y el día.">
+<style>
+  @font-face { font-family: "Press Start 2P"; src: url("web/fuentes/press-start-2p.ttf"); }
+  @font-face { font-family: "Outfit"; src: url("web/fuentes/outfit.ttf"); font-weight: 100 900; }
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0d0e14; color: #fff; font-family: "Outfit", sans-serif; overflow: hidden; }
+  header { height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 16px; box-sizing: border-box; }
+  header b { font: 13px "Press Start 2P", monospace; margin-right: 10px; white-space: nowrap; }
+  header button { font: 11px "Press Start 2P", monospace; color: #fff; background: #23263a; border: 2px solid transparent; border-radius: 10px;
+    padding: 10px 12px; cursor: pointer; }
+  header button.si { border-color: #f5d36f; color: #f5d36f; }
+  header button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  header span { margin-left: auto; font-size: 15px; color: rgba(255, 255, 255, 0.62); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header a { color: #7ad0ff; }
+  #marco { position: absolute; top: 60px; left: 0; right: 0; bottom: 0; }
+  #tele { position: absolute; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; }
+  @media (max-width: 720px) { header span { display: none; } header b { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <b>MOD TV PIXEL</b>
+  <button data-saga="piratas">Piratas</button><button data-saga="ninjas">Ninjas</button><button data-saga="magos">Magos</button>
+  <span>Las flechas y Enter, como el mando · <a href="https://github.com/davidmcaru/mod-tv-pixel">el código, en GitHub</a></span>
+</header>
+<div id="marco"><iframe id="tele" title="La pantalla de inicio de la tele"></iframe></div>
+<script>
+  // La pantalla es la de la tele, a 1920 × 1080: aquí se encaja en la ventana. ?saga=ninjas&dia=3&h=21 enseña otra saga,
+  // otro día (0 es el domingo) y otra hora.
+  const marco = document.getElementById("marco"), tele = document.getElementById("tele"), q = new URLSearchParams(location.search);
+  function encaja() {
+    const k = Math.min(marco.clientWidth / 1920, marco.clientHeight / 1080);
+    tele.style.transform = `scale(${k})`;
+    tele.style.left = (marco.clientWidth - 1920 * k) / 2 + "px";
+    tele.style.top = (marco.clientHeight - 1080 * k) / 2 + "px";
+  }
+  function poner(saga) {
+    const extra = ["dia", "h", "graficos"].filter((k) => q.has(k)).map((k) => `${k}=${encodeURIComponent(q.get(k))}`).join("&");
+    tele.src = `web/${saga}.html${extra ? "?" + extra : ""}`;
+    document.querySelectorAll("header button").forEach((b) => b.classList.toggle("si", b.dataset.saga === saga));
+    history.replaceState(null, "", "?" + [`saga=${saga}`, extra].filter(Boolean).join("&"));
+  }
+  document.querySelectorAll("header button").forEach((b) => b.addEventListener("click", () => poner(b.dataset.saga)));
+  tele.addEventListener("load", () => { try { tele.contentWindow.focus(); } catch (e) {} });
+  addEventListener("resize", encaja);
+  encaja();
+  poner(["piratas", "ninjas", "magos"].includes(q.get("saga")) ? q.get("saga") : "piratas");
+</script>
+</body>
+</html>

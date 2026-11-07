@@ -1,0 +1,9 @@
+/* pantalla.css — la pantalla de inicio a 1920 × 1080. */
+.capa canvas { position: absolute; inset: 0; will-change: transform; }
+.fundido { transition: opacity 0.8s ease; }
+.velo { background: linear-gradient(90deg, rgba(0, 0, 0, 0.58) 0%, rgba(0, 0, 0, 0.26) 34%, rgba(0, 0, 0, 0) 56%), linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 26%); }
+body.sin-seleccion .losa, body.sin-seleccion .debajo { opacity: 0; visibility: hidden; transition: opacity 0.45s ease, visibility 0s linear 0.45s; }
+body.sin-seleccion .elegida { height: auto; padding: 0 0 0 52px; background: none; border-color: transparent; backdrop-filter: none; }
+body.sin-seleccion .elegida canvas { display: none; }
+body.sin-seleccion .elegida span { font-size: 44px; letter-spacing: -0.5px; opacity: 0.86; }
+html.salvapantallas .antes, html.salvapantallas .lista, html.salvapantallas .pie, html.salvapantallas .botones { display: none; }

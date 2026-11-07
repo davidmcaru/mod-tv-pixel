@@ -1,0 +1,81 @@
+/* foco.css — la rueda de apps, su tarjeta y los botones de arriba. */
+@font-face { font-family: "Outfit"; src: url("../fuentes/outfit.ttf"); font-weight: 100 900; }
+:root { --acento: #e50914; }
+html, body { margin: 0; }
+body { width: 1920px; height: 1080px; overflow: hidden; position: relative; background: #000; color: #fff; font-family: "Outfit", sans-serif; }
+.capa { position: absolute; inset: 0; }
+.capa canvas { width: 1920px; height: 1080px; image-rendering: pixelated; display: block; }
+.velo { background: linear-gradient(90deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.3) 34%, rgba(0, 0, 0, 0) 56%), linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 32%); }
+
+.saludo { position: absolute; left: 98px; top: 56px; font-size: 21px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255, 255, 255, 0.82); }
+.hora { position: absolute; left: 94px; top: 88px; font-size: 72px; font-weight: 300; }
+.fecha { position: absolute; left: 98px; top: 178px; font-size: 20px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); }
+.botones { position: absolute; right: 96px; top: 62px; display: flex; gap: 14px; }
+.boton { height: 58px; box-sizing: border-box; padding: 0 26px 0 22px; border-radius: 29px; display: flex; align-items: center; gap: 14px; font-size: 21px; font-weight: 500;
+  background: rgba(255, 255, 255, 0.08); border: 1.5px solid rgba(255, 255, 255, 0.22); backdrop-filter: blur(12px); }
+.boton.redondo { width: 58px; padding: 0; justify-content: center; }
+.boton svg { width: 26px; height: 26px; }
+
+.lista { position: absolute; left: 72px; top: 500px; width: 800px; }
+.elegida { height: 120px; box-sizing: border-box; border-radius: 26px; border: 1.5px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px); display: flex; align-items: center; padding-left: 21px; gap: 26px; }
+.elegida i { width: 7px; height: 60px; border-radius: 4px; background: var(--acento); }
+.elegida span { font-size: 84px; font-weight: 300; letter-spacing: -1px; }
+.otra { margin-left: 52px; font-weight: 300; letter-spacing: -0.5px; }
+.pie { position: absolute; left: 126px; top: 988px; font-size: 16px; font-weight: 500; letter-spacing: 0.32em; color: rgba(255, 255, 255, 0.7); }
+.pie b { color: #fff; margin-left: 18px; }
+
+.losa { position: absolute; left: 1038px; top: 275px; width: 812px; height: 480px; box-sizing: border-box; border-radius: 40px;
+  background: rgba(255, 255, 255, 0.06); border: 1.5px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(16px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 3px 0 color-mix(in srgb, var(--acento) 70%, transparent); transform-origin: right bottom; }
+.tarjeta { position: absolute; left: 26px; top: 26px; right: 26px; bottom: 26px; border-radius: 28px; background: #fff; display: grid; place-items: center; }
+.tarjeta span { font-family: "Outfit", sans-serif; font-size: 120px; font-weight: 700; color: #1b1b1f; line-height: 1; }
+.debajo { position: absolute; left: 1064px; top: 768px; transform-origin: right top; }
+.etiqueta { display: flex; align-items: center; gap: 16px; font-size: 22px; color: rgba(255, 255, 255, 0.78); }
+.etiqueta em { font-style: normal; font-size: 14px; font-weight: 600; letter-spacing: 0.24em; border: 1.5px solid rgba(255, 255, 255, 0.4); border-radius: 6px; padding: 4px 10px; color: #fff; }
+.etiqueta b { color: #fff; font-weight: 600; }
+.acciones { display: flex; gap: 14px; margin-top: 26px; }
+.acciones span { height: 60px; box-sizing: border-box; padding: 0 26px; border-radius: 30px; display: flex; align-items: center; font-size: 22px; font-weight: 500;
+  background: rgba(255, 255, 255, 0.08); border: 1.5px solid rgba(255, 255, 255, 0.22); backdrop-filter: blur(10px); }
+.marca { position: absolute; right: 56px; bottom: -36px; font-size: 230px; font-weight: 300; color: rgba(255, 255, 255, 0.07); letter-spacing: -4px; line-height: 1; }
+.marca.pixel { font-family: "Press Start 2P", monospace; font-size: 150px; letter-spacing: 0; bottom: 30px; color: rgba(255, 255, 255, 0.09); }
+.tarjeta.clara { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(6px); }
+
+body.negrita .saludo, body.negrita .fecha { font-weight: 700; color: #fff; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
+body.negrita .hora { font-weight: 600; text-shadow: 0 3px 16px rgba(0, 0, 0, 0.3); }
+body.esmerilado .debajo { padding: 18px 22px 20px; margin-left: -22px; border-radius: 30px; background: rgba(14, 16, 30, 0.32);
+  border: 1.5px solid rgba(255, 255, 255, 0.16); backdrop-filter: blur(14px); }
+body.esmerilado .etiqueta { color: rgba(255, 255, 255, 0.92); }
+body.bolas .elegida { gap: 22px; padding-left: 24px; }
+.elegida canvas.bola { flex: none; }
+
+.antes { position: absolute; left: 124px; bottom: 598px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.antes .otra { margin-left: 0; }
+.boton.foco { background: rgba(255, 255, 255, 0.2); border-color: #fff; box-shadow: 0 0 0 2px #fff, 0 0 26px rgba(255, 255, 255, 0.35); }
+.elegida.sin-foco { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.07); }
+
+.tarjeta.mas { background: rgba(24, 26, 38, 0.9); display: flex; align-items: center; justify-content: center; gap: 44px; }
+.tarjeta.mas span { font-family: "Outfit", sans-serif; font-size: 104px; font-weight: 600; color: #fff; transform: none; letter-spacing: -0.02em; }
+
+body.fecha-arriba .fecha { top: 92px; }
+body.fecha-arriba .hora { top: 120px; }
+body.ajustada .elegida { display: inline-flex; padding-right: 46px; }
+body.etiqueta-sola .debajo { left: 1265px !important; width: 585px; margin-left: 0; padding: 0; background: none; border: 0; backdrop-filter: none; box-sizing: border-box; }
+body.etiqueta-sola .etiqueta { justify-content: center; padding: 14px 18px; border-radius: 20px; background: rgba(14, 16, 30, 0.34);
+  border: 1.5px solid rgba(255, 255, 255, 0.16); backdrop-filter: blur(14px); color: rgba(255, 255, 255, 0.92); }
+body.etiqueta-sola .acciones { justify-content: center; }
+.losa.foco { box-shadow: 0 0 0 6px #fff, 0 30px 80px rgba(0, 0, 0, 0.45); }
+
+body.pixel .botones { top: 44px; right: 72px; gap: 20px; }
+body.pixel .boton { width: 92px; height: 92px; padding: 0; justify-content: center; border-radius: 22px; background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.24); }
+body.pixel .boton.apagado canvas.obj { opacity: 0.45; }
+body.pixel .boton canvas.obj, body.pixel .acciones canvas.obj { display: block; flex: none; }
+body.pixel .debajo .acciones { gap: 22px; margin-top: 22px; }
+body.pixel .acciones span { height: 66px; padding: 0 24px 0 16px; gap: 12px; border-radius: 18px; font-size: 20px; font-weight: 600;
+  background: rgba(255, 255, 255, 0.1); border: 1.5px solid rgba(255, 255, 255, 0.24); backdrop-filter: blur(10px); }
+body.pixel .acciones span canvas.en-foco, body.pixel .acciones span.foco canvas.en-foco + canvas { display: none; }
+body.pixel .acciones span.foco canvas.en-foco { display: block; }
+body.pixel.etiqueta-sola .etiqueta { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.14); backdrop-filter: blur(10px); }
+.tarjeta.app { background: rgba(24, 26, 38, 0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; }
+.tarjeta.app img { width: 480px; height: 270px; border-radius: 22px; object-fit: cover; display: block; }
+.tarjeta.app span { font: 600 46px "Outfit", sans-serif; color: #fff; transform: none; letter-spacing: 0; }

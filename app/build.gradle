@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'es.davidm.modtvpixel'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'es.davidm.modtvpixel'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    buildTypes {
+        release {
+            // Se instala con adb, sin Google Play: va firmada con la clave de depuración de quien la compila.
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // Las pantallas están en la carpeta web/ de la raíz, que también se abre en el navegador: entran tal cual al compilar.
+    sourceSets {
+        main {
+            assets.srcDirs += "$buildDir/generated/pantallas"
+        }
+    }
+}
+
+def copiarWeb = tasks.register('copiarWeb', Sync) {
+    from(rootProject.file('web')) {
+        into 'web'
+    }
+    into "$buildDir/generated/pantallas"
+}
+preBuild.dependsOn copiarWeb

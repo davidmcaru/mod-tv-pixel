@@ -1,0 +1,17 @@
+// Mod TV Pixel: una pantalla de inicio en pixel art para Android TV, con tres sagas que cambian con la hora y el día.
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "mod-tv-pixel"
+include ':app'

@@ -1,0 +1,75 @@
+/* inicio.css — los menús de cristal, el panel de opciones y la lista de todas las apps. */
+html, body { margin: 0; cursor: none; }
+html { background: #000; }
+
+html::after { content: ""; position: fixed; inset: 0; z-index: 90; background: #000; pointer-events: none; transition: opacity 0.6s ease; }
+html.visible::after { opacity: 0; visibility: hidden; transition: opacity 0.6s ease, visibility 0s linear 0.6s; }
+html.saliendo::after { transition-duration: 0.25s; }
+html.apagada::after { transition: none; }
+
+.aviso { position: absolute; left: 50%; bottom: 60px; transform: translateX(-50%); z-index: 60; font: 600 24px "Outfit", sans-serif; color: #fff;
+  background: rgba(12, 12, 18, 0.88); border: 1.5px solid rgba(255, 255, 255, 0.2); border-radius: 18px; padding: 14px 26px; transition: opacity 0.4s; }
+.aviso.fuera { opacity: 0; }
+
+.menu-cristal { position: absolute; z-index: 58; box-sizing: border-box; padding: 14px; border-radius: 26px; font-family: "Outfit", sans-serif; color: #fff;
+  background: rgba(22, 24, 38, 0.5); border: 1.5px solid rgba(255, 255, 255, 0.22); backdrop-filter: blur(20px); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
+.menu-cristal.menu-app { background: rgba(22, 24, 38, 0.66); border-color: rgba(255, 255, 255, 0.22); backdrop-filter: blur(10px); box-shadow: none; }
+.menu-cristal.alineado { display: flex; flex-direction: column; justify-content: center; padding: 8px 12px; }
+.menu-cristal.alineado .mc-titulo { padding: 2px 12px 6px; }
+.menu-cristal.alineado .mc-item { min-height: 52px; }
+.menu-cristal .mc-titulo { display: block; font: 13px "Press Start 2P", monospace; color: rgba(255, 255, 255, 0.72); padding: 10px 14px 14px; }
+.menu-cristal .mc-item { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 0 26px 0 14px; border-radius: 16px; font-size: 24px; font-weight: 500; white-space: nowrap; }
+.menu-cristal .mc-item span { flex: 1; display: flex; flex-direction: column; line-height: 1.15; }
+.menu-cristal .mc-item small { font-size: 17px; color: rgba(255, 255, 255, 0.62); }
+.menu-cristal .mc-ico { width: 52px; display: flex; justify-content: center; flex: none; }
+.menu-cristal .mc-ico canvas { display: block; }
+.menu-cristal .mc-item canvas.en-foco, .menu-cristal .mc-item.foco canvas.en-foco + canvas { display: none; }
+.menu-cristal .mc-item.foco canvas.en-foco { display: block; }
+.menu-cristal .mc-item.foco { background: #fff; color: #111; }
+.menu-cristal .mc-item.foco small { color: rgba(0, 0, 0, 0.55); }
+.menu-cristal .mc-item.apagado { opacity: 0.36; }
+.menu-cristal.caja-opciones { display: grid; grid-template-columns: repeat(3, 1fr); }
+.caja-opciones .co-casilla { position: relative; aspect-ratio: 1; display: grid; place-items: center; box-sizing: border-box; border-radius: 22px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.16); }
+.caja-opciones .co-casilla canvas { display: block; }
+.caja-opciones .co-casilla.foco, .caja-opciones .co-op.foco { background: rgba(255, 255, 255, 0.2); border-color: #fff; box-shadow: 0 0 0 2px #fff, 0 0 26px rgba(255, 255, 255, 0.35); }
+.caja-opciones .co-casilla.ahora::after, .caja-opciones .co-op.ahora::after { content: ""; position: absolute; right: 10px; top: 10px; width: 12px; height: 12px; border-radius: 50%; background: #36d17a; box-shadow: 0 0 10px #36d17a; }
+.caja-opciones .co-titulo { grid-column: 1 / -1; font: 13px "Press Start 2P", monospace; color: rgba(255, 255, 255, 0.72); padding: 8px 4px 0; }
+.caja-opciones .co-graficos { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: inherit; }
+.caja-opciones .co-op { position: relative; height: 76px; display: grid; place-items: center; box-sizing: border-box; border-radius: 22px; background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.16); font-size: 26px; font-weight: 600; }
+
+.todas { position: absolute; inset: 0; z-index: 56; display: grid; place-items: center; background: rgba(4, 6, 12, 0.35); font-family: "Outfit", sans-serif; color: #fff; }
+.todas .ta-panel { width: 1700px; height: 900px; box-sizing: border-box; padding: 34px 44px 24px; border-radius: 40px; display: flex; flex-direction: column;
+  background: rgba(22, 24, 38, 0.45); border: 1.5px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(24px); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
+html.cristal-quieto .boton, html.cristal-quieto .elegida, html.cristal-quieto .losa, html.cristal-quieto .etiqueta {
+  backdrop-filter: none; background-image: linear-gradient(var(--tinte), var(--tinte)), var(--copia);
+  background-size: 100% 100%, var(--cw, 1920px) var(--ch, 1080px); background-position: 0 0, var(--cx, 0) var(--cy, 0);
+  background-origin: border-box; background-clip: border-box; background-repeat: no-repeat; }
+html.cristal-quieto .tarjeta.clara { backdrop-filter: none; }
+html.cristal-quieto .boton { --tinte: rgba(255, 255, 255, 0.1); }
+html.cristal-quieto .elegida { --tinte: rgba(255, 255, 255, 0.05); }
+html.cristal-quieto .elegida.sin-foco { --tinte: rgba(255, 255, 255, 0.02); }
+html.cristal-quieto .losa { --tinte: rgba(255, 255, 255, 0.06); }
+html.cristal-quieto .etiqueta { --tinte: rgba(255, 255, 255, 0.05); }
+.todas .ta-panel.ta-copia { position: relative; overflow: hidden; isolation: isolate; background: none; backdrop-filter: none; }
+.todas .ta-panel .ta-fondo { position: absolute; z-index: -1; width: 1920px; height: 1080px; pointer-events: none; }
+.todas .ta-cab { display: flex; align-items: center; justify-content: space-between; margin: -4px 0 18px 4px; }
+.todas .ta-titulo { font: 15px "Press Start 2P", monospace; color: rgba(255, 255, 255, 0.78); }
+.todas .ta-titulo span { color: #ffd23f; margin-left: 14px; }
+.todas .ta-ventana { flex: 1; overflow: hidden; padding: 16px; margin: -16px; }
+.todas .ta-rejilla { display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px 30px; transition: transform 0.22s ease; }
+.todas .ta-app { position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 0; }
+.todas .ta-cartel { width: 100%; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; background: rgba(255, 255, 255, 0.08); display: block; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.todas .ta-cartel img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.todas .ta-cartel .ta-sw { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #ff4554 0 22px, #26262c 22px calc(100% - 22px), #00c3e3 calc(100% - 22px)); }
+.todas .ta-nom { font-size: 21px; font-weight: 500; color: rgba(255, 255, 255, 0.85); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.todas .ta-fav { position: absolute; right: 12px; top: 12px; display: none; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5)); }
+.todas .ta-app.favorita .ta-fav { display: block; }
+.todas .ta-app.foco .ta-cartel { transform: scale(1.06); box-shadow: 0 0 0 4px #fff, 0 14px 30px rgba(0, 0, 0, 0.45); }
+.todas .ta-app.foco .ta-fav { transform: translate(8px, -8px); }
+.todas .ta-app.foco .ta-nom { color: #fff; font-weight: 600; }
+.todas .ta-pista { font-size: 18px; color: rgba(255, 255, 255, 0.6); text-align: center; margin-top: 14px; }
+
+.moviendo { outline: 4px dashed #fff !important; outline-offset: 6px; }
+.pista-mover { position: absolute; left: 50%; top: 22px; transform: translateX(-50%); z-index: 57; font: 600 22px "Outfit", sans-serif; color: #111;
+  background: #fff; border-radius: 16px; padding: 10px 22px; }

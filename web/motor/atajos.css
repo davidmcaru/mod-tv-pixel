@@ -1,0 +1,24 @@
+/* atajos.css — los atajos de la rueda y su aviso. */
+.luces { display: inline-flex; gap: 8px; align-items: center; }
+.luces i { width: 13px; height: 13px; border-radius: 50%; background: var(--c); opacity: 0.25; }
+.luces i.si { opacity: 1; box-shadow: 0 0 10px 2px color-mix(in srgb, var(--c) 70%, transparent); }
+canvas.exclama { position: absolute; z-index: 40; pointer-events: none; }
+.etiqueta-foco { position: absolute; z-index: 40; transform: translateX(-50%); white-space: nowrap; font: 600 21px "Outfit", sans-serif; color: #fff;
+  background: rgba(10, 10, 14, 0.8); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 9px 18px; }
+.etiqueta-foco.derecha { transform: translateY(-50%); }
+.etiqueta-foco small { font-size: 19px; font-weight: 500; color: rgba(255, 255, 255, 0.7); margin-left: 10px; }
+
+.entra { animation: entra 0.45s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes entra { from { opacity: 0; transform: scale(0.7); } }
+canvas.exclama.sale { animation: sale 2.4s steps(1, end) both; }
+@keyframes sale { 0% { opacity: 0; } 15% { opacity: 1; transform: translateY(-6px); } 22% { transform: none; } 85% { opacity: 1; } 100% { opacity: 0; } }
+
+.tarjeta.switch, .tarjeta.usb { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.tarjeta.switch { background: rgba(30, 30, 36, 0.9); }
+.tarjeta.switch .joy { position: absolute; top: 0; bottom: 0; width: 64px; }
+.tarjeta.switch .joy.izq { left: 0; background: #ff4554; }
+.tarjeta.switch .joy.der { right: 0; background: #00c3e3; }
+.tarjeta.usb { background: linear-gradient(135deg, rgba(38, 52, 120, 0.9), rgba(150, 58, 118, 0.88)); }
+.atajo-cuerpo { display: flex; align-items: center; gap: 44px; }
+.atajo-cuerpo span { font-family: "Outfit", sans-serif; font-size: 112px; font-weight: 600; color: #fff; line-height: 1; letter-spacing: -0.02em; transform: none; display: flex; flex-direction: column; }
+.atajo-cuerpo small { font-size: 34px; font-weight: 500; color: rgba(255, 255, 255, 0.72); margin-top: 16px; letter-spacing: 0.02em; }
