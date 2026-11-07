@@ -1,10 +1,12 @@
 <div align="center">
 
-<img src="capturas/cartel.png" alt="Mod TV Pixel" width="100%">
+<p><picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="capturas/hero-quieto.webp">
+  <img src="capturas/hero.webp" alt="Mod TV Pixel, una pantalla de inicio en pixel art para Android TV: tres pantallas reales, de Ninjas, Magos y Piratas, pasan una a una al frente, cada una con su día, su hora y su escenario" width="100%">
+</picture></p>
 
-Una pantalla de inicio en pixel art para Android TV.<br>
 Tres sagas, piratas, ninjas y magos, que cambian con la hora y con el día de la semana.<br>
-Dibujada a mano, píxel a píxel.
+Dibujadas a mano, píxel a píxel.
 
 <br>
 
